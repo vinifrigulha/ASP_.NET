@@ -2,7 +2,7 @@
 {
     static void Main()
     {
-        ILogger logger = new FileLogger();
+        ILogger logger = new FileLogger("mylog.txt");
         BankAccount account1 = new BankAccount("Vinícius", 100, logger);
         BankAccount account2 = new BankAccount("Mariana", 100, logger);
 
@@ -18,23 +18,29 @@
 
 class FileLogger : ILogger
 {
+    private readonly string filePath;
+
+    public FileLogger(string filePath)
+    {
+        this.filePath = filePath;
+    }
+
     public void Log(string message)
     {
-        File.AppendAllText("log.txt", $"{message}\n");
+        File.AppendAllText(filePath, $"{message}\n");
     }
 }
 
 class ConsoleLogger : ILogger
 {
-    public void Log(string message)
-    {
-        Console.WriteLine($"LOGGER: {message}");
-    }
 }
 
 interface ILogger
 {
-    void Log(string message);
+    void Log(string message)
+    {
+        Console.WriteLine($"LOGGER: {message}");
+    }
 }
 
 class BankAccount
